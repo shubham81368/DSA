@@ -1,0 +1,53 @@
+class Solution {
+    public String longestDiverseString(int a, int b, int c) {
+        PriorityQueue<Pair>pq=new PriorityQueue<>();
+        if(a>0){
+            pq.offer(new Pair(a,'a'));
+        }
+        if(b>0){
+            pq.offer(new Pair(b,'b'));
+        }
+        if(c>0){
+            pq.offer(new Pair(c,'c'));
+        }
+
+        StringBuilder s=new StringBuilder();
+        while(!pq.isEmpty()){
+            int n=s.length();
+            Pair node=pq.poll();
+            int count=node.count;
+            char ch=node.ch;
+            if(n>=2 && s.charAt(n-1)==ch && s.charAt(n-2)==ch){
+                if(pq.isEmpty())break;
+                Pair sec=pq.poll();
+                s.append(sec.ch);
+                sec.count--;
+                if(sec.count>0){
+                    pq.offer(new Pair(sec.count,sec.ch));
+                }
+            }
+            else{
+                s.append(node.ch);
+                node.count--;
+              
+            }
+
+            if(node.count>0){
+              pq.add(new Pair(node.count,node.ch));
+            }
+        }
+        return s.toString();
+    }
+}
+
+class Pair implements Comparable<Pair>{
+    int count;
+    char ch;
+    Pair(int count,char ch){
+        this.count=count;
+        this.ch=ch;
+    }
+    public int compareTo(Pair that){//sort element by dec order
+        return that.count- this.count;
+    }
+}
